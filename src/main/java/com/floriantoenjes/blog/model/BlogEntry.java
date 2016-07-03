@@ -10,7 +10,7 @@ public class BlogEntry {
     String title;
     List<String> tags;
     List<Comment> commentList;
-    LocalDateTime creationtime;
+    LocalDateTime creationTime;
 
     public boolean addComment(Comment comment) {
         // Store these comments!
@@ -23,6 +23,6 @@ public class BlogEntry {
         this.content = content;
         this.title = title;
         this.tags = tags;
-        creationtime = LocalDateTime.now();
+        creationTime = LocalDateTime.now();
     }
 }

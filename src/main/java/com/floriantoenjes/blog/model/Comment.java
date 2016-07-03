@@ -8,5 +8,10 @@ public class Comment {
     String content;
     LocalDateTime creationTime;
 
-
+    public Comment(int id, String author, String content, LocalDateTime creationTime) {
+        this.id = id;
+        this.author = author;
+        this.content = content;
+        this.creationTime = creationTime;
+    }
 }
