@@ -7,12 +7,20 @@ import java.util.List;
 public class SimpleBlogDao implements BlogDao {
     List<BlogEntry> blogEntryList;
 
-
     @Override
     public boolean addEntry(BlogEntry blogEntry) {
         return blogEntryList.add(blogEntry);
     }
 
+    @Override
+    public boolean removeEntry(BlogEntry blogEntry) {
+        return blogEntryList.remove(blogEntry);
+    }
+
+    @Override
+    public boolean editEntry(BlogEntry blogEntry) {
+        return false;
+    }
 
     @Override
     public List<BlogEntry> findAllEntries() {
