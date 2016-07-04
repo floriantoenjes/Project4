@@ -35,6 +35,10 @@ public class Main {
             modelMap.put("entries", dao.findAllEntries());
             return new ModelAndView(modelMap, "index.hbs");
         }, new HandlebarsTemplateEngine());
+
+        post("/", (req, res) -> {
+            return null;
+        });
     }
 
 }
