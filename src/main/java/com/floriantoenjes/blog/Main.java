@@ -16,16 +16,13 @@ import static spark.Spark.*;
 
 public class Main {
     static BlogDao dao;
+    static Slugify slugify;
 
     public static void main(String[] args) {
         staticFileLocation("/public");
         dao = new SimpleBlogDao();
-
         try {
-            Slugify slugify = new Slugify();
-            String title = "A Great Day with a Friend";
-            dao.addEntry(new BlogEntry("Florian Antonius", slugify.slugify(title), title,
-                    "This has been a great day!", Arrays.asList("Karl Jaspers", "Oldenburg")));
+            slugify = new Slugify();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -37,8 +34,27 @@ public class Main {
         }, new HandlebarsTemplateEngine());
 
         post("/", (req, res) -> {
-            return null;
+            String author = "Florian Antonius";
+            String title = req.queryParams("title");
+            String slug = slugify.slugify(title);
+            String content = req.queryParams("entry");
+
+            BlogEntry blogEntry = new BlogEntry(author, title, slug, content, null);
+
+            dao.addEntry(blogEntry);
+
+            res.redirect("/");
+            return res;
         });
+
+        get("/entries/:slug", (req, res) -> {
+            Map<String, Object> modelMap = new HashMap<>();
+            BlogEntry blogEntry = dao.findEntryBySlug(req.params(":slug"));
+            modelMap.put("title", blogEntry.getTitle());
+            modelMap.put("content", blogEntry.getContent());
+            modelMap.put("creationTime", blogEntry.getCreationTime());
+            return new ModelAndView(modelMap, "detail.hbs");
+        }, new HandlebarsTemplateEngine());
     }
 
 }

@@ -30,7 +30,6 @@ public class SimpleBlogDao implements BlogDao {
 
     @Override
     public BlogEntry findEntryBySlug(String slug) {
-//        blogEntryList.stream().filter();
-        return null;
+        return blogEntryList.stream().filter(be -> be.getSlug().equals(slug)).findFirst().get();
     }
 }
