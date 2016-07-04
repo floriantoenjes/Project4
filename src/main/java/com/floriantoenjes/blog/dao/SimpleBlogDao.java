@@ -2,10 +2,11 @@ package com.floriantoenjes.blog.dao;
 
 import com.floriantoenjes.blog.model.BlogEntry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleBlogDao implements BlogDao {
-    List<BlogEntry> blogEntryList;
+    List<BlogEntry> blogEntryList = new ArrayList<>();
 
     @Override
     public boolean addEntry(BlogEntry blogEntry) {
