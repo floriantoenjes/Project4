@@ -56,4 +56,21 @@ public class BlogEntry {
     public LocalDateTime getCreationTime() {
         return creationTime;
     }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+
+    }
+
+    public void setCreationTime(LocalDateTime creationTime) {
+        this.creationTime = creationTime;
+    }
 }

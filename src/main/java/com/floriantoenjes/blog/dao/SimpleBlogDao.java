@@ -2,6 +2,7 @@ package com.floriantoenjes.blog.dao;
 
 import com.floriantoenjes.blog.model.BlogEntry;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,9 @@ public class SimpleBlogDao implements BlogDao {
 
     @Override
     public BlogEntry findEntryBySlug(String slug) {
-        return blogEntryList.stream().filter(be -> be.getSlug().equals(slug)).findFirst().get();
+        return blogEntryList.stream().filter(blockEntry -> blockEntry.getSlug()
+                .equals(slug))
+                .findFirst()
+                .get();
     }
 }

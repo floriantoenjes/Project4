@@ -8,6 +8,7 @@ import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +27,12 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // Mock blog data
+        String titleTmp = "A Great Day with a Friend";
+        String slugTmp = slugify.slugify(titleTmp);
+        dao.addEntry(new BlogEntry("Florian Antonius", titleTmp, slugTmp,
+                "It was an amazing day with a good friend.", null));
 
         get("/", (req, res) -> {
             Map<String, Object> modelMap = new HashMap<>();
@@ -47,14 +54,39 @@ public class Main {
             return res;
         });
 
-        get("/entries/:slug", (req, res) -> {
-            Map<String, Object> modelMap = new HashMap<>();
+        get("/entry/:slug", (req, res) -> {
             BlogEntry blogEntry = dao.findEntryBySlug(req.params(":slug"));
+            Map<String, Object> modelMap = new HashMap<>();
             modelMap.put("title", blogEntry.getTitle());
             modelMap.put("content", blogEntry.getContent());
             modelMap.put("creationTime", blogEntry.getCreationTime());
+            modelMap.put("slug", blogEntry.getSlug());
             return new ModelAndView(modelMap, "detail.hbs");
         }, new HandlebarsTemplateEngine());
+
+        get("/entry/:slug/edit", (req, res) -> {
+            BlogEntry blogEntry = dao.findEntryBySlug(req.params(":slug"));
+            Map<String, Object> modelMap = new HashMap<>();
+            modelMap.put("title", blogEntry.getTitle());
+            modelMap.put("content", blogEntry.getContent());
+            modelMap.put("creationTime", blogEntry.getCreationTime());
+            return new ModelAndView(modelMap, "edit.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        post("/entry/:slug/edit", (req, res) -> {
+            String slug = req.params(":slug");
+            BlogEntry blogEntry = dao.findEntryBySlug(slug);
+            String title = req.queryParams("title");
+
+            blogEntry.setTitle(title);
+            String newSlug = slugify.slugify(title);
+            blogEntry.setSlug(newSlug);
+            blogEntry.setContent(req.queryParams("entry"));
+            blogEntry.setCreationTime(LocalDateTime.now());
+
+            res.redirect("/entry/" + newSlug);
+            return res;
+        });
     }
 
 }
