@@ -34,13 +34,16 @@ public class Main {
         String slugTmp = slugify.slugify(titleTmp);
         dao.addEntry(new BlogEntry("Florian Antonius", titleTmp, slugTmp,
                 "It was an amazing day with a good friend.", null));
+        // End Mock
 
+        // List all blog entrys
         get("/", (req, res) -> {
             Map<String, Object> modelMap = new HashMap<>();
             modelMap.put("entries", dao.findAllEntries());
             return new ModelAndView(modelMap, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
+        // Create a new blog entry
         post("/", (req, res) -> {
             String author = "Florian Antonius";
             String title = req.queryParams("title");
@@ -55,6 +58,7 @@ public class Main {
             return res;
         });
 
+        // Detail view of a blog entry
         get("/entry/:slug", (req, res) -> {
             BlogEntry blogEntry = dao.findEntryBySlug(req.params(":slug"));
             Map<String, Object> modelMap = new HashMap<>();
@@ -66,6 +70,7 @@ public class Main {
             return new ModelAndView(modelMap, "detail.hbs");
         }, new HandlebarsTemplateEngine());
 
+        // Adding a comment to a blog entry
         post("/entry/:slug", (req, res) -> {
             String slug = req.params(":slug");
             BlogEntry blogEntry = dao.findEntryBySlug(slug);
@@ -77,6 +82,7 @@ public class Main {
             return res;
         });
 
+        // Edit view of a blog entry
         get("/entry/:slug/edit", (req, res) -> {
             BlogEntry blogEntry = dao.findEntryBySlug(req.params(":slug"));
             Map<String, Object> modelMap = new HashMap<>();
@@ -86,6 +92,7 @@ public class Main {
             return new ModelAndView(modelMap, "edit.hbs");
         }, new HandlebarsTemplateEngine());
 
+        // Editing a blog entry
         post("/entry/:slug/edit", (req, res) -> {
             String slug = req.params(":slug");
             BlogEntry blogEntry = dao.findEntryBySlug(slug);
