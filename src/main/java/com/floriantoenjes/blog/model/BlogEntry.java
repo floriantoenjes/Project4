@@ -3,19 +3,19 @@ package com.floriantoenjes.blog.model;
 import com.github.slugify.Slugify;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BlogEntry {
     private String author;
     private String content;
     private String slug;
-
     private String title;
 
-    private List<String> tags;
-
-    private List<Comment> commentList;
+    private List<String> tags = new ArrayList<>();
+    private List<Comment> commentList = new ArrayList<>();
     private LocalDateTime creationTime;
+
     public boolean addComment(Comment comment) {
         return commentList.add(comment);
     }

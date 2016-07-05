@@ -3,6 +3,7 @@ package com.floriantoenjes.blog;
 import com.floriantoenjes.blog.dao.BlogDao;
 import com.floriantoenjes.blog.dao.SimpleBlogDao;
 import com.floriantoenjes.blog.model.BlogEntry;
+import com.floriantoenjes.blog.model.Comment;
 import com.github.slugify.Slugify;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
@@ -61,11 +62,20 @@ public class Main {
             modelMap.put("content", blogEntry.getContent());
             modelMap.put("creationTime", blogEntry.getCreationTime());
             modelMap.put("slug", blogEntry.getSlug());
+            modelMap.put("comments", blogEntry.getCommentList());
             return new ModelAndView(modelMap, "detail.hbs");
         }, new HandlebarsTemplateEngine());
 
-        // Todo: Implement comment creation
-        post("/entry:slug", (req, res) -> null);
+        post("/entry/:slug", (req, res) -> {
+            String slug = req.params(":slug");
+            BlogEntry blogEntry = dao.findEntryBySlug(slug);
+            Comment comment = new Comment(req.queryParams("name"),
+                    req.queryParams("comment"),
+                    LocalDateTime.now());
+            blogEntry.addComment(comment);
+            res.redirect("/entry/" + slug);
+            return res;
+        });
 
         get("/entry/:slug/edit", (req, res) -> {
             BlogEntry blogEntry = dao.findEntryBySlug(req.params(":slug"));
