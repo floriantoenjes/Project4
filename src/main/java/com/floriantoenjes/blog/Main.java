@@ -64,6 +64,9 @@ public class Main {
             return new ModelAndView(modelMap, "detail.hbs");
         }, new HandlebarsTemplateEngine());
 
+        // Todo: Implement comment creation
+        post("/entry:slug", (req, res) -> null);
+
         get("/entry/:slug/edit", (req, res) -> {
             BlogEntry blogEntry = dao.findEntryBySlug(req.params(":slug"));
             Map<String, Object> modelMap = new HashMap<>();
