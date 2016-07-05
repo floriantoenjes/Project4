@@ -28,20 +28,20 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        HandlebarsTemplateEngine hbsEngine = new HandlebarsTemplateEngine();
 
         // Mock blog data
         String titleTmp = "A Great Day with a Friend";
         String slugTmp = slugify.slugify(titleTmp);
         dao.addEntry(new BlogEntry("Florian Antonius", titleTmp, slugTmp,
                 "It was an amazing day with a good friend.", null));
-        // End Mock
 
         // List all blog entrys
         get("/", (req, res) -> {
             Map<String, Object> modelMap = new HashMap<>();
             modelMap.put("entries", dao.findAllEntries());
             return new ModelAndView(modelMap, "index.hbs");
-        }, new HandlebarsTemplateEngine());
+        }, hbsEngine);
 
         // Create a new blog entry
         post("/", (req, res) -> {
@@ -58,25 +58,13 @@ public class Main {
             return res;
         });
 
-        // Removing a blog entry
-        delete("/entry/:slug", (req, res) -> {
-            BlogEntry blogEntry = dao.findEntryBySlug(req.params(":slug"));
-            dao.removeEntry(blogEntry);
-            res.redirect("/");
-            return res;
-        });
-
         // Detail view of a blog entry
         get("/entry/:slug", (req, res) -> {
             BlogEntry blogEntry = dao.findEntryBySlug(req.params(":slug"));
             Map<String, Object> modelMap = new HashMap<>();
-            modelMap.put("title", blogEntry.getTitle());
-            modelMap.put("content", blogEntry.getContent());
-            modelMap.put("creationTime", blogEntry.getCreationTime());
-            modelMap.put("slug", blogEntry.getSlug());
-            modelMap.put("comments", blogEntry.getCommentList());
+            modelMap.put("entry", blogEntry);
             return new ModelAndView(modelMap, "detail.hbs");
-        }, new HandlebarsTemplateEngine());
+        }, hbsEngine);
 
         // Adding a comment to a blog entry
         post("/entry/:slug", (req, res) -> {
@@ -90,15 +78,21 @@ public class Main {
             return res;
         });
 
+        // Removing a blog entry
+        delete("/entry/:slug", (req, res) -> {
+            BlogEntry blogEntry = dao.findEntryBySlug(req.params(":slug"));
+            dao.removeEntry(blogEntry);
+            res.redirect("/");
+            return res;
+        });
+
         // Edit view of a blog entry
         get("/entry/:slug/edit", (req, res) -> {
             BlogEntry blogEntry = dao.findEntryBySlug(req.params(":slug"));
             Map<String, Object> modelMap = new HashMap<>();
-            modelMap.put("title", blogEntry.getTitle());
-            modelMap.put("content", blogEntry.getContent());
-            modelMap.put("creationTime", blogEntry.getCreationTime());
+            modelMap.put("entry", blogEntry);
             return new ModelAndView(modelMap, "edit.hbs");
-        }, new HandlebarsTemplateEngine());
+        }, hbsEngine);
 
         // Editing a blog entry
         post("/entry/:slug/edit", (req, res) -> {
@@ -116,5 +110,4 @@ public class Main {
             return res;
         });
     }
-
 }
