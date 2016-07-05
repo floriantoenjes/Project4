@@ -10,25 +10,27 @@ import spark.template.handlebars.HandlebarsTemplateEngine;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import static spark.Spark.*;
 
 public class Main {
-    static BlogDao dao;
-    static Slugify slugify;
+    private static BlogDao dao;
+    private static HandlebarsTemplateEngine hbsEngine;
+    private static Slugify slugify;
 
     public static void main(String[] args) {
-        staticFileLocation("/public");
         dao = new SimpleBlogDao();
+        hbsEngine = new HandlebarsTemplateEngine();
         try {
             slugify = new Slugify();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        HandlebarsTemplateEngine hbsEngine = new HandlebarsTemplateEngine();
+
+        // Set location of static files
+        staticFileLocation("/public");
 
         // Mock blog data
         String titleTmp = "A Great Day with a Friend";

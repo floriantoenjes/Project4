@@ -1,5 +1,7 @@
 ## Build a Blog with Spark
 
+Treehouse Java Web Development Techdegree Project 4
+
 In this project, you will build your own blog using Spark. 
 The main (index) page will list blog entry titles with a title and 
 date/time created. Each blog entry title will link to a detail page 
