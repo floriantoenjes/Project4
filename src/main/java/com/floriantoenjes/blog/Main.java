@@ -36,6 +36,16 @@ public class Main {
         dao.addEntry(new BlogEntry("Florian Antonius", titleTmp, slugTmp,
                 "It was an amazing day with a good friend.", null));
 
+        before("/entry/:slug/edit", (req, res) -> {
+            boolean authenticated = false;
+
+            if (!authenticated) {
+                halt(401, "You don't have the permission to edit blog entries!");
+            }
+        });
+
+
+
         // List all blog entrys
         get("/", (req, res) -> {
             Map<String, Object> modelMap = new HashMap<>();
