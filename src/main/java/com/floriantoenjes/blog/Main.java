@@ -58,6 +58,14 @@ public class Main {
             return res;
         });
 
+        // Removing a blog entry
+        delete("/entry/:slug", (req, res) -> {
+            BlogEntry blogEntry = dao.findEntryBySlug(req.params(":slug"));
+            dao.removeEntry(blogEntry);
+            res.redirect("/");
+            return res;
+        });
+
         // Detail view of a blog entry
         get("/entry/:slug", (req, res) -> {
             BlogEntry blogEntry = dao.findEntryBySlug(req.params(":slug"));
