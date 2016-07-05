@@ -36,17 +36,14 @@ public class Main {
         dao.addEntry(new BlogEntry("Florian Antonius", titleTmp, slugTmp,
                 "It was an amazing day with a good friend.", null));
 
-        before("/entry/:slug/edit", (req, res) -> {
-            boolean authenticated = false;
-
-            if (!authenticated) {
-                halt(401, "You don't have the permission to edit blog entries!");
+        // Cookie assignment to attribute
+        before((req, res) -> {
+            if (req.cookie("user") != null) {
+                req.attribute("user", req.cookie("user"));
             }
         });
 
-
-
-        // List all blog entrys
+        // List all blog entries
         get("/", (req, res) -> {
             Map<String, Object> modelMap = new HashMap<>();
             modelMap.put("entries", dao.findAllEntries());
@@ -54,6 +51,13 @@ public class Main {
         }, hbsEngine);
 
         // Create a new blog entry
+        before("/new.html", (req, res) -> {
+            if (req.attribute("user") == null || !req.attribute("user").equals("admin")) {
+                res.redirect("/password.html");
+                halt();
+            }
+        });
+
         post("/", (req, res) -> {
             String author = "Florian Antonius";
             String title = req.queryParams("title");
@@ -96,15 +100,19 @@ public class Main {
             return res;
         });
 
-        // Edit view of a blog entry
+        // Edit a blog entry
         get("/entry/:slug/edit", (req, res) -> {
+            if (req.attribute("user") == null || !req.attribute("user").equals("admin")) {
+                res.redirect("/password.html");
+                halt();
+            }
             BlogEntry blogEntry = dao.findEntryBySlug(req.params(":slug"));
             Map<String, Object> modelMap = new HashMap<>();
             modelMap.put("entry", blogEntry);
             return new ModelAndView(modelMap, "edit.hbs");
         }, hbsEngine);
 
-        // Editing a blog entry
+        // Submitting the blog entry changes
         post("/entry/:slug/edit", (req, res) -> {
             String slug = req.params(":slug");
             BlogEntry blogEntry = dao.findEntryBySlug(slug);
@@ -117,6 +125,16 @@ public class Main {
             blogEntry.setCreationTime(LocalDateTime.now());
 
             res.redirect("/entry/" + newSlug);
+            return res;
+        });
+
+        post("/password.html", (req, res) -> {
+            if (req.queryParams("password").equals("admin")) {
+                res.cookie("user", "admin");
+                res.redirect("/");
+                halt();
+            }
+            res.redirect("/password.html");
             return res;
         });
     }
