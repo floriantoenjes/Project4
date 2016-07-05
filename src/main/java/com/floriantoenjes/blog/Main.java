@@ -92,8 +92,15 @@ public class Main {
             return res;
         });
 
+        before("/entry/:slug/*", (req, res) -> {
+            if (req.attribute("user") == null || !req.attribute("user").equals("admin")) {
+                res.redirect("/password.html");
+                halt();
+            }
+        });
+
         // Removing a blog entry
-        delete("/entry/:slug", (req, res) -> {
+        get("/entry/:slug/delete", (req, res) -> {
             BlogEntry blogEntry = dao.findEntryBySlug(req.params(":slug"));
             dao.removeEntry(blogEntry);
             res.redirect("/");
@@ -102,10 +109,6 @@ public class Main {
 
         // Edit a blog entry
         get("/entry/:slug/edit", (req, res) -> {
-            if (req.attribute("user") == null || !req.attribute("user").equals("admin")) {
-                res.redirect("/password.html");
-                halt();
-            }
             BlogEntry blogEntry = dao.findEntryBySlug(req.params(":slug"));
             Map<String, Object> modelMap = new HashMap<>();
             modelMap.put("entry", blogEntry);
