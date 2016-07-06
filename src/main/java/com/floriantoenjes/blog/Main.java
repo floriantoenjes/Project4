@@ -37,7 +37,7 @@ public class Main {
         String titleTmp = "A Great Day with a Friend";
         String slugTmp = slugify.slugify(titleTmp);
         dao.addEntry(new BlogEntry("Florian Antonius", titleTmp, slugTmp,
-                "It was an amazing day with a good friend.", Arrays.asList(new String[]{"Friends", "Amazing"})));
+                "It was an amazing day with a good friend.", Arrays.asList("Friends", "Amazing")));
 
         // Cookie assignment to attribute
         before((req, res) -> {
@@ -61,6 +61,7 @@ public class Main {
             }
         });
 
+        // Submit the creation of a new blog entry
         post("/", (req, res) -> {
             String author = "Florian Antonius";
             String title = req.queryParams("title");
@@ -95,6 +96,7 @@ public class Main {
             return res;
         });
 
+        // User authentication before editing or deleting a blog entry
         before("/entry/:slug/*", (req, res) -> {
             if (req.attribute("user") == null || !req.attribute("user").equals("admin")) {
                 res.redirect("/password.html");
@@ -134,6 +136,7 @@ public class Main {
             return res;
         });
 
+        // Authentication and cookie setting on the password page
         post("/password.html", (req, res) -> {
             if (req.queryParams("password").equals("admin")) {
                 res.cookie("user", "admin");
