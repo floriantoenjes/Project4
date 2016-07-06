@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SimpleBlogDao implements BlogDao {
-    List<BlogEntry> blogEntryList = new ArrayList<>();
+    private final List<BlogEntry> blogEntryList = new ArrayList<>();
 
     @Override
     public boolean addEntry(BlogEntry blogEntry) {

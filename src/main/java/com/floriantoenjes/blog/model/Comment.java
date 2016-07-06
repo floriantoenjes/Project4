@@ -3,9 +3,9 @@ package com.floriantoenjes.blog.model;
 import java.time.LocalDateTime;
 
 public class Comment {
-    String author;
-    String content;
-    LocalDateTime creationTime;
+    private String author;
+    private String content;
+    private LocalDateTime creationTime;
 
     public Comment(String author, String content, LocalDateTime creationTime) {
         this.author = author;
