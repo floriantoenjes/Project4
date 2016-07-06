@@ -1,6 +1,7 @@
 package com.floriantoenjes.blog.model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Comment {
     private String author;
@@ -21,7 +22,7 @@ public class Comment {
         return content;
     }
 
-    public LocalDateTime getCreationTime() {
-        return creationTime;
+    public String getCreationTime() {
+        return creationTime.format(DateTimeFormatter.ofPattern("d.M.Y H:m"));
     }
 }
