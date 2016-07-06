@@ -10,6 +10,7 @@ import spark.template.handlebars.HandlebarsTemplateEngine;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +37,7 @@ public class Main {
         String titleTmp = "A Great Day with a Friend";
         String slugTmp = slugify.slugify(titleTmp);
         dao.addEntry(new BlogEntry("Florian Antonius", titleTmp, slugTmp,
-                "It was an amazing day with a good friend.", null));
+                "It was an amazing day with a good friend.", Arrays.asList(new String[]{"Friends", "Amazing"})));
 
         // Cookie assignment to attribute
         before((req, res) -> {

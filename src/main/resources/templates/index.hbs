@@ -24,6 +24,11 @@
                     {{#each entries}}
                     <article>
                         <h2><a href="entry/{{slug}}">{{title}}</a></h2>
+                        <ul class="tags">
+                            {{#each tags}}
+                            <li class="tag">{{this}}</li>
+                            {{/each}}
+                        </ul>
                         <time datetime="">{{creationTime}}</time>
                     </article>
                     {{/each}}
