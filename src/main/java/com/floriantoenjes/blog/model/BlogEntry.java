@@ -3,6 +3,7 @@ package com.floriantoenjes.blog.model;
 import com.github.slugify.Slugify;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,8 +54,8 @@ public class BlogEntry {
         return commentList;
     }
 
-    public LocalDateTime getCreationTime() {
-        return creationTime;
+    public String getCreationTime() {
+        return creationTime.format(DateTimeFormatter.ofPattern("d.M.Y H:m"));
     }
 
     public void setTitle(String title) {
