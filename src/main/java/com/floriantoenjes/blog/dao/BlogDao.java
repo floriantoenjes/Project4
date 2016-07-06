@@ -10,4 +10,6 @@ public interface BlogDao {
     boolean editEntry(BlogEntry blogEntry);
     List<BlogEntry> findAllEntries();
     BlogEntry findEntryBySlug(String slug);
+
+    List<BlogEntry> findAllEntriesFromCategory(String category);
 }

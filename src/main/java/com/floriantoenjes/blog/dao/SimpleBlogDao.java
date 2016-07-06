@@ -5,6 +5,7 @@ import com.floriantoenjes.blog.model.BlogEntry;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SimpleBlogDao implements BlogDao {
     List<BlogEntry> blogEntryList = new ArrayList<>();
@@ -27,6 +28,13 @@ public class SimpleBlogDao implements BlogDao {
     @Override
     public List<BlogEntry> findAllEntries() {
         return blogEntryList;
+    }
+
+    @Override
+    public List<BlogEntry> findAllEntriesFromCategory(String category) {
+        return blogEntryList.stream()
+                .filter(blockEntry -> blockEntry.getTags().contains(category))
+                .collect(Collectors.toList());
     }
 
     @Override
