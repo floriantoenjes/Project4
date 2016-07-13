@@ -37,7 +37,7 @@ public class Main {
 
     public static void main(String[] args) {
         // Create first blog entries
-        createMockData();
+        createSomeBlogEntries();
 
 
         // Set location of static files
@@ -144,7 +144,7 @@ public class Main {
         }
     }
 
-    private static void createMockData() {
+    private static void createSomeBlogEntries() {
         String titleTmp;
         String slugTmp;
 
