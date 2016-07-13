@@ -9,10 +9,10 @@ public class Comment {
     private LocalDateTime creationTime;
     private String creationTimeFormatted;
 
-    public Comment(String author, String content, LocalDateTime creationTime) {
+    public Comment(String author, String content) {
         this.author = author;
         this.content = content;
-        this.creationTime = creationTime;
+        this.creationTime = LocalDateTime.now();
         this.creationTimeFormatted = creationTime.format(DateTimeFormatter.ofPattern("d.M.Y H:m"));
     }
 
