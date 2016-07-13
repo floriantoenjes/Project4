@@ -36,7 +36,7 @@ public class Main {
         // Create first blog entries
         createMockData();
 
-        // Cookie assignment to attribute
+        // Session creation & cookie assignment to attribute
         before((req, res) -> {
             req.session(true);
             if (req.cookie("user") != null) {
@@ -72,7 +72,7 @@ public class Main {
             dao.addEntry(blogEntry);
 
             res.redirect("/");
-            return res;
+            return null;
         });
 
         // Detail view of a blog entry
@@ -92,7 +92,7 @@ public class Main {
                     LocalDateTime.now());
             blogEntry.addComment(comment);
             res.redirect("/entry/" + slug);
-            return res;
+            return null;
         });
 
         // User authentication before editing or deleting a blog entry
@@ -109,7 +109,7 @@ public class Main {
             BlogEntry blogEntry = dao.findEntryBySlug(req.params(":slug"));
             dao.removeEntry(blogEntry);
             res.redirect("/");
-            return res;
+            return null;
         });
 
         // Editing a blog entry
@@ -133,7 +133,7 @@ public class Main {
             blogEntry.setCreationTime(LocalDateTime.now());
 
             res.redirect("/entry/" + newSlug);
-            return res;
+            return null;
         });
 
         // Authentication and cookie setting on the password page
@@ -146,7 +146,7 @@ public class Main {
                 halt();
             }
             res.redirect("/password.html");
-            return res;
+            return null;
         });
     }
 
@@ -167,6 +167,8 @@ public class Main {
         titleTmp = "What Will This Day Bring?";
         slugTmp = slugify.slugify(titleTmp);
         dao.addEntry(new BlogEntry("Florian Antonius", titleTmp, slugTmp,
-                "Isn't it always a mystery what is going to happen next?", Arrays.asList("Time")));
+                "Isn't it always a mystery what is going to happen next? One day it looks like a shiny morning and the " +
+                        "next thing you know, it is pouring rain without limitation. It is this unforeseen factor" +
+                        "which brings about a freshness in life everyday.", Arrays.asList("Time")));
     }
 }

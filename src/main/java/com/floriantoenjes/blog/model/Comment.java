@@ -7,11 +7,13 @@ public class Comment {
     private String author;
     private String content;
     private LocalDateTime creationTime;
+    private String creationTimeFormatted;
 
     public Comment(String author, String content, LocalDateTime creationTime) {
         this.author = author;
         this.content = content;
         this.creationTime = creationTime;
+        this.creationTimeFormatted = creationTime.format(DateTimeFormatter.ofPattern("d.M.Y H:m"));
     }
 
     public String getAuthor() {
@@ -23,6 +25,6 @@ public class Comment {
     }
 
     public String getCreationTime() {
-        return creationTime.format(DateTimeFormatter.ofPattern("d.M.Y H:m"));
+        return creationTimeFormatted;
     }
 }

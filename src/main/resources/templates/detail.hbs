@@ -24,7 +24,7 @@
                 <div class="entry-list single">
                     <article>
                         <h1>{{title}}</h1>
-                        <time datetime="">{{creationTime}}</time>
+                        <time datetime="">{{creationTimeFormatted}}</time>
                         <div class="entry">
                             <p>{{content}}</p>
                             <p><a class="link" href="{{slug}}/edit">Edit Entry</a></p>
@@ -39,7 +39,7 @@
                     {{#each commentList}}
                         <div class="comment">
                             <strong>{{author}}</strong>
-                            <time datetime="">{{creationTime}}</time>
+                            <time datetime="">{{creationTimeFormatted}}</time>
                             <p>{{content}}</p>
                         </div>
                     {{/each}}

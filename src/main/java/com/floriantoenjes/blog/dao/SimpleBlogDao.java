@@ -2,7 +2,6 @@ package com.floriantoenjes.blog.dao;
 
 import com.floriantoenjes.blog.model.BlogEntry;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,7 +11,11 @@ public class SimpleBlogDao implements BlogDao {
 
     @Override
     public boolean addEntry(BlogEntry blogEntry) {
-        return blogEntryList.add(blogEntry);
+        boolean added = blogEntryList.add(blogEntry);
+        blogEntryList.sort((b1, b2) -> {
+            return -b1.getCreationTime().compareTo(b2.getCreationTime());
+        });
+        return added;
     }
 
     @Override

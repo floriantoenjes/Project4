@@ -16,6 +16,7 @@ public class BlogEntry {
     private List<String> tags = new ArrayList<>();
     private List<Comment> commentList = new ArrayList<>();
     private LocalDateTime creationTime;
+    private String creationTimeFormatted;
 
     public boolean addComment(Comment comment) {
         return commentList.add(comment);
@@ -28,6 +29,7 @@ public class BlogEntry {
         this.title = title;
         this.tags = tags;
         creationTime = LocalDateTime.now();
+        creationTimeFormatted = creationTime.format(DateTimeFormatter.ofPattern("d.M.Y H:m"));
     }
 
     public String getAuthor() {
@@ -54,8 +56,12 @@ public class BlogEntry {
         return commentList;
     }
 
-    public String getCreationTime() {
-        return creationTime.format(DateTimeFormatter.ofPattern("d.M.Y H:m"));
+    public String getCreationTimeFormatted() {
+        return creationTimeFormatted;
+    }
+
+    public LocalDateTime getCreationTime() {
+        return creationTime;
     }
 
     public void setTitle(String title) {
