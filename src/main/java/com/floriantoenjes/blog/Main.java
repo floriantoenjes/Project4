@@ -36,11 +36,12 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        // Set location of static files
-        staticFileLocation("/public");
-
         // Create first blog entries
         createMockData();
+
+
+        // Set location of static files
+        staticFileLocation("/public");
 
         // Session creation & cookie assignment to attribute
         before((req, res) -> {
