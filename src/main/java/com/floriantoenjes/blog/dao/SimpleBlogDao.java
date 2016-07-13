@@ -42,6 +42,6 @@ public class SimpleBlogDao implements BlogDao {
         return blogEntryList.stream().filter(blockEntry -> blockEntry.getSlug()
                 .equals(slug))
                 .findFirst()
-                .get();
+                .orElse(null);
     }
 }
