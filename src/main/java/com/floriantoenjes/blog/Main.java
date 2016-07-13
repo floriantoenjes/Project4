@@ -38,6 +38,7 @@ public class Main {
 
         // Cookie assignment to attribute
         before((req, res) -> {
+            req.session(true);
             if (req.cookie("user") != null) {
                 req.attribute("user", req.cookie("user"));
             }
@@ -53,6 +54,7 @@ public class Main {
         // Creating a new blog entry
         before("/new.html", (req, res) -> {
             if (req.attribute("user") == null || !req.attribute("user").equals("admin")) {
+                req.session().attribute("origin", "/new.html");
                 res.redirect("/password.html");
                 halt();
             }
@@ -96,6 +98,7 @@ public class Main {
         // User authentication before editing or deleting a blog entry
         before("/entry/:slug/*", (req, res) -> {
             if (req.attribute("user") == null || !req.attribute("user").equals("admin")) {
+                req.session().attribute("origin", "/entry/" + req.params(":slug") + "/edit");
                 res.redirect("/password.html");
                 halt();
             }
@@ -137,7 +140,9 @@ public class Main {
         post("/password.html", (req, res) -> {
             if (req.queryParams("password").equals("admin")) {
                 res.cookie("user", "admin");
-                res.redirect("/");
+                String origin = req.session().attribute("origin");
+                req.session().removeAttribute("origin");
+                res.redirect(origin);
                 halt();
             }
             res.redirect("/password.html");
