@@ -137,7 +137,7 @@ public class Main {
         });
     }
 
-    public static void redirectToPassword(Request req, Response res) {
+    private static void redirectToPassword(Request req, Response res) {
         if (req.attribute("user") == null || !req.attribute("user").equals("admin")) {
             req.session().attribute("origin", req.uri());
             res.redirect("/password.html");
@@ -145,7 +145,7 @@ public class Main {
         }
     }
 
-    public static void createMockData() {
+    private static void createMockData() {
         String titleTmp;
         String slugTmp;
 
