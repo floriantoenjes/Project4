@@ -59,7 +59,7 @@ public class Main {
         }, hbsEngine);
 
         // Authentication before adding a new blog entry
-        before("/new.html", Main::redirectToPassword);
+        before("/new.html", Main::redirectToLogin);
 
         // Submitting the creation of a new blog entry
         post("/", (req, res) -> {
@@ -93,7 +93,7 @@ public class Main {
         });
 
         // User authentication before editing or deleting a blog entry
-        before("/entry/:slug/*", Main::redirectToPassword);
+        before("/entry/:slug/*", Main::redirectToLogin);
 
         // Removing a blog entry
         get("/entry/:slug/delete", (req, res) -> {
@@ -136,7 +136,7 @@ public class Main {
         });
     }
 
-    private static void redirectToPassword(Request req, Response res) {
+    private static void redirectToLogin(Request req, Response res) {
         if (req.attribute("user") == null || !req.attribute("user").equals("admin")) {
             req.session().attribute("origin", req.uri());
             res.redirect("/password.html");
