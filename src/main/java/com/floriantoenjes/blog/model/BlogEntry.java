@@ -1,7 +1,5 @@
 package com.floriantoenjes.blog.model;
 
-import com.github.slugify.Slugify;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;

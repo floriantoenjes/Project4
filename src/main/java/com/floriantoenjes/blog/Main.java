@@ -11,7 +11,6 @@ import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +28,8 @@ public class Main {
             slugify = new Slugify();
         } catch (IOException e) {
             e.printStackTrace();
+            System.err.println("Could not create a Slugify instance!");
+            System.exit(1);
         }
     }
 
