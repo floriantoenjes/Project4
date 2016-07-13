@@ -47,7 +47,7 @@ public class Main {
         // Listing of all blog entries
         get("/", (req, res) -> {
             Map<String, Object> modelMap = new HashMap<>();
-            modelMap.put("entries", dao.findAllEntries());
+            modelMap.put("entries", dao.findAll());
             return new ModelAndView(modelMap, "index.hbs");
         }, hbsEngine);
 
@@ -67,9 +67,7 @@ public class Main {
             String slug = slugify.slugify(title);
             String content = req.queryParams("entry");
 
-            BlogEntry blogEntry = new BlogEntry(author, title, slug, content, null);
-
-            dao.addEntry(blogEntry);
+            dao.add(new BlogEntry(author, title, slug, content, null));
 
             res.redirect("/");
             return null;
@@ -77,7 +75,7 @@ public class Main {
 
         // Detail view of a blog entry
         get("/entry/:slug", (req, res) -> {
-            BlogEntry blogEntry = dao.findEntryBySlug(req.params(":slug"));
+            BlogEntry blogEntry = dao.findBySlug(req.params(":slug"));
             Map<String, Object> modelMap = new HashMap<>();
             modelMap.put("entry", blogEntry);
             return new ModelAndView(modelMap, "detail.hbs");
@@ -86,11 +84,12 @@ public class Main {
         // Adding a comment to a blog entry
         post("/entry/:slug", (req, res) -> {
             String slug = req.params(":slug");
-            BlogEntry blogEntry = dao.findEntryBySlug(slug);
+            BlogEntry blogEntry = dao.findBySlug(slug);
             Comment comment = new Comment(req.queryParams("name"),
                     req.queryParams("comment"),
                     LocalDateTime.now());
             blogEntry.addComment(comment);
+            blogEntry.getCommentList().sort( (c1, c2) -> -c1.getCreationTime().compareTo(c2.getCreationTime()));
             res.redirect("/entry/" + slug);
             return null;
         });
@@ -106,15 +105,15 @@ public class Main {
 
         // Removing a blog entry
         get("/entry/:slug/delete", (req, res) -> {
-            BlogEntry blogEntry = dao.findEntryBySlug(req.params(":slug"));
-            dao.removeEntry(blogEntry);
+            BlogEntry blogEntry = dao.findBySlug(req.params(":slug"));
+            dao.remove(blogEntry);
             res.redirect("/");
             return null;
         });
 
         // Editing a blog entry
         get("/entry/:slug/edit", (req, res) -> {
-            BlogEntry blogEntry = dao.findEntryBySlug(req.params(":slug"));
+            BlogEntry blogEntry = dao.findBySlug(req.params(":slug"));
             Map<String, Object> modelMap = new HashMap<>();
             modelMap.put("entry", blogEntry);
             return new ModelAndView(modelMap, "edit.hbs");
@@ -123,15 +122,10 @@ public class Main {
         // Submitting the blog entry changes
         post("/entry/:slug/edit", (req, res) -> {
             String slug = req.params(":slug");
-            BlogEntry blogEntry = dao.findEntryBySlug(slug);
+            BlogEntry blogEntry = dao.findBySlug(slug);
             String title = req.queryParams("title");
-
-            blogEntry.setTitle(title);
             String newSlug = slugify.slugify(title);
-            blogEntry.setSlug(newSlug);
-            blogEntry.setContent(req.queryParams("entry"));
-            blogEntry.setCreationTime(LocalDateTime.now());
-
+            dao.edit(blogEntry, title, newSlug, req.queryParams("entry"));
             res.redirect("/entry/" + newSlug);
             return null;
         });
@@ -156,17 +150,17 @@ public class Main {
 
         titleTmp = "A Great Day with a Friend";
         slugTmp = slugify.slugify(titleTmp);
-        dao.addEntry(new BlogEntry("Florian Antonius", titleTmp, slugTmp,
+        dao.add(new BlogEntry("Florian Antonius", titleTmp, slugTmp,
                 "It was an amazing day with a good friend.", Arrays.asList("Friends", "Amazing")));
 
         titleTmp = "The Unusual Coder";
         slugTmp = slugify.slugify(titleTmp);
-        dao.addEntry(new BlogEntry("Florian Antonius", titleTmp, slugTmp,
+        dao.add(new BlogEntry("Florian Antonius", titleTmp, slugTmp,
                 "Some people code in extraordinarily strange ways.", Arrays.asList("People", "Coding", "Strange")));
 
         titleTmp = "What Will This Day Bring?";
         slugTmp = slugify.slugify(titleTmp);
-        dao.addEntry(new BlogEntry("Florian Antonius", titleTmp, slugTmp,
+        dao.add(new BlogEntry("Florian Antonius", titleTmp, slugTmp,
                 "Isn't it always a mystery what is going to happen next? One day it looks like a shiny morning and the " +
                         "next thing you know, it is pouring rain without limitation. It is this unforeseen factor" +
                         "which brings about a freshness in life everyday.", Arrays.asList("Time")));

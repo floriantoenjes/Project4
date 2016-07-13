@@ -5,11 +5,12 @@ import com.floriantoenjes.blog.model.BlogEntry;
 import java.util.List;
 
 public interface BlogDao {
-    boolean addEntry(BlogEntry blogEntry);
-    boolean removeEntry(BlogEntry blogEntry);
-    boolean editEntry(BlogEntry blogEntry);
-    List<BlogEntry> findAllEntries();
-    BlogEntry findEntryBySlug(String slug);
+    boolean add(BlogEntry blogEntry);
+    boolean remove(BlogEntry blogEntry);
 
-    List<BlogEntry> findAllEntriesFromCategory(String category);
+    BlogEntry edit(BlogEntry blogEntry, String title, String slug, String content);
+
+    List<BlogEntry> findAll();
+    BlogEntry findBySlug(String slug);
+    List<BlogEntry> findAllFromCategory(String category);
 }
