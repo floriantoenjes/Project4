@@ -58,10 +58,8 @@ public class Main {
             return new ModelAndView(modelMap, "index.hbs");
         }, hbsEngine);
 
-        // Creating a new blog entry
+        // Authentication before adding a new blog entry
         before("/new.html", Main::redirectToPassword);
-
-
 
         // Submitting the creation of a new blog entry
         post("/", (req, res) -> {
