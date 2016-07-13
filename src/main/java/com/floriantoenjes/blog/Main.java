@@ -8,6 +8,8 @@ import com.floriantoenjes.blog.model.BlogEntry;
 import com.floriantoenjes.blog.model.Comment;
 import com.github.slugify.Slugify;
 import spark.ModelAndView;
+import spark.Request;
+import spark.Response;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
 import java.io.IOException;
@@ -56,13 +58,9 @@ public class Main {
         }, hbsEngine);
 
         // Creating a new blog entry
-        before("/new.html", (req, res) -> {
-            if (req.attribute("user") == null || !req.attribute("user").equals("admin")) {
-                req.session().attribute("origin", "/new.html");
-                res.redirect("/password.html");
-                halt();
-            }
-        });
+        before("/new.html", Main::redirectToPassword);
+
+
 
         // Submitting the creation of a new blog entry
         post("/", (req, res) -> {
@@ -96,13 +94,7 @@ public class Main {
         });
 
         // User authentication before editing or deleting a blog entry
-        before("/entry/:slug/*", (req, res) -> {
-            if (req.attribute("user") == null || !req.attribute("user").equals("admin")) {
-                req.session().attribute("origin", "/entry/" + req.params(":slug") + "/edit");
-                res.redirect("/password.html");
-                halt();
-            }
-        });
+        before("/entry/:slug/*", Main::redirectToPassword);
 
         // Removing a blog entry
         get("/entry/:slug/delete", (req, res) -> {
@@ -143,6 +135,14 @@ public class Main {
             res.redirect("/password.html");
             return null;
         });
+    }
+
+    public static void redirectToPassword(Request req, Response res) {
+        if (req.attribute("user") == null || !req.attribute("user").equals("admin")) {
+            req.session().attribute("origin", req.uri());
+            res.redirect("/password.html");
+            halt();
+        }
     }
 
     public static void createMockData() {
