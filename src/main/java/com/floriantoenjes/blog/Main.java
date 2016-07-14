@@ -36,10 +36,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        // Create first blog entries
-        createSomeBlogEntries();
-
-
         // Set location of static files
         staticFileLocation("/public");
 
@@ -134,6 +130,10 @@ public class Main {
             res.redirect("/password.html");
             return null;
         });
+
+
+        // Create first blog entries
+        createSomeBlogEntries();
     }
 
     private static void redirectToLogin(Request req, Response res) {
