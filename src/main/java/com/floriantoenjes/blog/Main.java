@@ -65,7 +65,7 @@ public class Main {
             String content = req.queryParams("entry");
 
             blogDao.add(new BlogEntry(author, title, slug, content, null));
-
+            // Todo: Set a flash message
             res.redirect("/");
             return null;
         });
@@ -96,6 +96,7 @@ public class Main {
             BlogEntry blogEntry = blogDao.findBySlug(req.params(":slug"));
             blogDao.remove(blogEntry);
             res.redirect("/");
+            // Todo: Set a flash message
             return null;
         });
 
@@ -115,18 +116,21 @@ public class Main {
             String newSlug = slugify.slugify(title);
             blogDao.edit(blogEntry, title, newSlug, req.queryParams("entry"));
             res.redirect("/entry/" + newSlug);
+            // Todo: Set a flash message
             return null;
         });
 
         // Authentication and cookie setting on the password page
         post("/password.html", (req, res) -> {
             if (req.queryParams("password").equals("admin")) {
+                // Todo: Set a flash message
                 res.cookie("user", "admin");
                 String origin = req.session().attribute("origin");
                 req.session().removeAttribute("origin");
                 res.redirect(origin);
                 halt();
             }
+            // Todo: Set a flash message
             res.redirect("/password.html");
             return null;
         });
